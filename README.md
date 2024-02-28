@@ -1,4 +1,4 @@
-## commandes nécessaires :
+# commandes nécessaires :
 ### npm init -y
 ### npm i express
 ### npm i -g nodemon
