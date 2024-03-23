@@ -1,10 +1,15 @@
 const express = require('express');
 const app = express();
 const auth= require('./routes/auth')
+
 app.use(express.json());
-app.use('/auth',auth);
+// app.use('/auth',auth);
 const dotenv = require('dotenv');
 const mongoose = require('mongoose')
+const userRouter = require('./routes/userRoute.js')
+
+app.use("/user" , userRouter);
+
 //bch yifhem ili huwe bch ya9ra ml fichier .env
 dotenv.config()
 const MONGODB_URI=process.env.MONGODB_URI

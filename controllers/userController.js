@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 
 exports.register = async (req,res) => {
@@ -9,7 +9,7 @@ exports.register = async (req,res) => {
     try {
         
         console.log("Request Body:", req.body);
-        const existingUser = await User.findOne({ username : req.body.username }).exec()
+        const existingUser = await User.findOne({ Username : req.body.Username }).exec()
     if(existingUser){
         return res.status(400).json("This username already exists")
         
@@ -18,13 +18,7 @@ exports.register = async (req,res) => {
     
     }
     
-    // const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-    // const newUser = await User({
-    //     email : req.body.name,
-    //     Username : req.body.Username,
-    //     password: hashedPassword
-    // })
+ 
 
    const  {email , Username , password} = req.body;
     const newUser = await User({
