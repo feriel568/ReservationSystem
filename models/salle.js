@@ -14,9 +14,13 @@ const salleSchema = mongoose.Schema({
         type: String,
         required: true
       },
+      isAvailable : {
+          type: Boolean,
+          default: false
+      },
       description: {
         type: String,
-        default: ''
+       
       },
       days: [{
         type: String,
