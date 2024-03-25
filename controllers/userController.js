@@ -11,7 +11,7 @@ exports.register = async (req,res) => {
         console.log("Request Body:", req.body);
         const existingUser = await User.findOne({ Username : req.body.Username }).exec()
     if(existingUser){
-        return res.status(400).json("This username already exists")
+        return res.json("This username already exists")
         
         // const message = "Username already exists";
         // return res.render('register', { message: message });
@@ -42,16 +42,16 @@ exports.login = async (req,res) => {
 
     const { Username, password } = req.body;
     if (!Username || !password) {
-        return res.status(400).json({ message: 'Email and password are required.' });
+        return res.json({ message: 'Email and password are required.' });
        
     }
     const user = await User.findOne({ Username }).exec();
     if (!user) {
-        return res.status(401).json({ message: 'Authentication failed. User not found.' });
+        return res.json({ message: 'Authentication failed. User not found.' });
     }
 
     if (!user.comparePassword(password)) {
-        return res.status(401).json({ message: 'Authentication failed. Invalid password.' });
+        return res.json({ message: 'Authentication failed. Invalid password.' });
     }
 
     const token = jwt.sign({ Username: user.Username }, process.env.JWT_SECRET, { expiresIn: '1h' });
