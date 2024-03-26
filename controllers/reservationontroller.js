@@ -3,10 +3,9 @@ const mongoose = require('mongoose')
 const Reservation = require('../models/reservation');
 const Salle = require('../models/salle');
 const nodemailer = require('nodemailer');
-// const transporter = nodemailer.createTransport(email);
 
 
-// Importez la méthode de comparaison de mot de passe pour le modèle User, si elle existe déjà dans le modèle
+
 const User = require('../models/user');
 
 function sendEmailNotification(email, subject, text)  {
