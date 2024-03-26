@@ -7,8 +7,12 @@ app.use(express.json());
 const dotenv = require('dotenv');
 const mongoose = require('mongoose')
 const userRouter = require('./routes/userRoute.js')
+const salleRouter = require('./routes/salleRoute.js')
+const resRouter = require('./routes/reservationRoute.js')
 
 app.use("/user" , userRouter);
+app.use("/salle" , salleRouter);
+app.use("/reservation" , resRouter);
 
 //bch yifhem ili huwe bch ya9ra ml fichier .env
 dotenv.config()

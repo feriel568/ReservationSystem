@@ -12,13 +12,13 @@ exports.makeReservation = async (req, res) => {
         }
         const existingSalle = await Salle.findById(salle);
         if (!existingSalle) {
-            return res.status(404).json({ message: 'Salle not found' });
+            return res.json({ message: 'Salle not found' });
         }
         const startDate =new Date(day);
         const dayName = getDayName(startDate.getDay());
 
         if (!existingSalle.days.includes(dayName)) {
-            return res.status(400).json({ message: 'Invalid day selected for the salle' });
+            return res.json({ message: 'Invalid day selected for the salle' });
         }
 
         const conflicts = await Reservation.find({
@@ -30,7 +30,7 @@ exports.makeReservation = async (req, res) => {
             ]
         });
         if (conflicts.length > 0) {
-            return res.status(409).json({ message: 'Salle unavailable during selected time' });
+            return res.json({ message: 'Salle unavailable during selected time' });
         }
 
         const newReservation = new Reservation({ user, salle, day, startTime, endTime });
@@ -77,3 +77,15 @@ exports.getAllReservations = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+exports.getSalleReservations = async (req, res) => {
+try {
+
+    const salleId = req.params.salleId
+    const resv = await Reservation.find({salle : salleId});
+    res.status(200).json({ resv });
+} catch (error) {
+    res.status(500).json({ error: error.message });
+}
+
+}
