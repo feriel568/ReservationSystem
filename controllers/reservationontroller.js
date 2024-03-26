@@ -2,10 +2,57 @@
 const mongoose = require('mongoose')
 const Reservation = require('../models/reservation');
 const Salle = require('../models/salle');
+const nodemailer = require('nodemailer');
+// const transporter = nodemailer.createTransport(email);
+
+
+// Importez la méthode de comparaison de mot de passe pour le modèle User, si elle existe déjà dans le modèle
+const User = require('../models/user');
+
+function sendEmailNotification(email, subject, text)  {
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL_ADDRESS,
+            pass: process.env.EMAIL_PASSWORD
+        },
+        
+       
+    });
+    
+
+        // Définir les options de l'e-mail
+        const mailOptions = {
+            from: process.env.EMAIL_ADDRESS, // Expéditeur
+            to: email, // Destinataire
+            subject: subject, // Sujet de l'e-mail
+            text: text // Contenu de l'e-mail
+        };
+
+        // Envoyer l'e-mail
+         transporter.sendMail(mailOptions);
+
+        console.log('Notification e-mail sent successfully.');
+    
+};
+
+
 exports.makeReservation = async (req, res) => {
     try {
-        const { user, salle, day, startTime, endTime } = req.body;
 
+        const userId = req.params.userId;
+        
+        const {salle, day, startTime, endTime } = req.body;
+
+
+        const user = await User.findById(userId);
+        console.log("user" , user);
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        
         function getDayName(dayOfWeek) {
             const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             return daysOfWeek[dayOfWeek];
@@ -33,8 +80,13 @@ exports.makeReservation = async (req, res) => {
             return res.json({ message: 'Salle unavailable during selected time' });
         }
 
-        const newReservation = new Reservation({ user, salle, day, startTime, endTime });
+        const newReservation = new Reservation({ user: userId,salle, day, startTime, endTime });
+        console.log(user.email);
         await newReservation.save();
+        const subject = 'Confirmation de réservation';
+        const text = `Votre réservation a été confirmée pour la salle ${existingSalle.name} le ${day} de ${startTime} à ${endTime}.`;
+         sendEmailNotification( user.email, subject , text);
+
         res.status(201).json({ message: 'Reservation created successfully', reservation: newReservation });
     } catch (error) {
         res.status(500).json({ error: error.message });
