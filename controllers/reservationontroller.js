@@ -93,20 +93,52 @@ exports.makeReservation = async (req, res) => {
 };
 
 
-
 exports.cancelReservation = async (req, res) => {
     try {
-        const reservationId = req.params.id;
-        const reservation = await Reservation.findById(reservationId);
+        const reservationId = req.params.reservationId;
+        const userId = req.params.userId; 
+
+        // Find the reservation by ID
+        // const reservation = await Reservation.find({salle : reservationId}); 
+        // const reservation = await Reservation.findOne({ _id: reservationId }).populate("salle"); 
+        const reservation = await Reservation.findById(reservationId).populate("salle" , "name");
+        console.log(reservation);
+
+
+
+        // Check if the reservation exists
         if (!reservation) {
             return res.status(404).json({ message: 'Reservation not found' });
         }
-        await Reservation.findByIdAndDelete(reservationId);
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+
+        // Check if the user exists
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Prepare email notification content
+        const subject = 'Annulation de réservation';
+        const text = `Votre réservation a été annulée pour la salle ${reservation.salle.name}`;
+        const userEmail = user.email;
+
+        // Delete the reservation
+        await Reservation.findByIdAndDelete(reservation);
+
+        // Send email notification to the user
+        sendEmailNotification(userEmail, subject, text);
+
+        // Respond with success message
         res.status(200).json({ message: 'Reservation canceled successfully' });
     } catch (error) {
+        // Handle any errors
         res.status(500).json({ error: error.message });
     }
-};
+}; 
+
+
 exports.getUserReservations = async (req, res) => {
     try {
         const { userId } = req.params;

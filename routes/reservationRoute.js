@@ -5,7 +5,7 @@ const auth = require('../middleware/auth')
 
 
 router.post('/add/:userId' , auth ,reservationController.makeReservation)
-router.delete('/delete/:id' , auth ,reservationController.cancelReservation)
+router.delete('/delete/:reservationId/:userId' , auth ,reservationController.cancelReservation)
 
 router.get('/myReservation/:userId' , auth ,reservationController.getUserReservations)
 
