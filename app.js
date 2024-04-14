@@ -31,6 +31,12 @@ app.get('/', (req, res) => {
 app.get('/calendar', (req, res) => {
   res.render('calendar',{title: 'Calendar'});
 });
+app.get('/makeReservation', (req, res) => {
+  res.render('makeReservation',{title: 'makeReservation'});
+});
+app.get('/cancelReservation', (req, res) => {
+  res.render('cancelReservation',{title: 'cancelReservation'});
+});
 app.get('/login', (req, res) => {
   const error = req.query.error; // Assuming the error value is coming from a query parameter
   res.render('login', { error });

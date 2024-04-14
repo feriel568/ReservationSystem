@@ -3,9 +3,6 @@ const mongoose = require('mongoose')
 const Reservation = require('../models/reservation');
 const Salle = require('../models/salle');
 const nodemailer = require('nodemailer');
-
-
-
 const User = require('../models/user');
 
 function sendEmailNotification(email, subject, text)  {
@@ -35,7 +32,6 @@ function sendEmailNotification(email, subject, text)  {
         console.log('Notification e-mail sent successfully.');
     
 };
-
 
 exports.makeReservation = async (req, res) => {
     try {
@@ -91,6 +87,65 @@ exports.makeReservation = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+// exports.makeReservation = async (req, res) => {
+//     try {
+//         // Destructure userId from the request parameters
+//         const { userId } = req.params;
+
+//         // Destructure salleId, day, startTime, and endTime from the request body
+//         const { salleId, day, startTime, endTime } = req.body;
+
+//         // Find the user by ID
+//         const user = await User.findById(userId);
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         // Find the salle by ID
+//         const salle = await Salle.findById(salleId);
+//         if (!salle) {
+//             return res.status(404).json({ message: 'Salle not found' });
+//         }
+
+//         // Validate the day of the reservation
+//         const startDate = new Date(day);
+//         const dayOfWeek = startDate.getDay();
+//         const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
+//         if (!salle.availableDays.includes(dayName)) {
+//             return res.status(400).json({ message: 'Invalid day selected for the salle' });
+//         }
+
+//         // Check for conflicts with other reservations
+//         const conflicts = await Reservation.find({
+//             salle: salleId,
+//             $or: [
+//                 { startTime: { $lt: endTime }, endTime: { $gt: startTime } },
+//                 { startTime: { $gte: startTime, $lte: endTime } },
+//                 { endTime: { $lte: endTime, $gte: startTime } }
+//             ]
+//         });
+
+//         if (conflicts.length > 0) {
+//             return res.status(400).json({ message: 'Salle unavailable during selected time' });
+//         }
+
+//         // Create a new reservation
+//         const newReservation = new Reservation({ user: userId, salle: salleId, day, startTime, endTime });
+//         await newReservation.save();
+
+//         // Send a confirmation email
+//         const subject = 'Confirmation de réservation';
+//         const text = `Votre réservation a été confirmée pour la salle ${salle.name} le ${day} de ${startTime} à ${endTime}.`;
+//         await sendEmailNotification(user.email, subject, text);
+
+//         // Respond with a success message and the new reservation
+//         res.status(201).json({ message: 'Reservation created successfully', reservation: newReservation });
+//     } catch (error) {
+//         // Log the error and respond with a generic error message
+//         console.error('Error making reservation:', error);
+//         res.status(500).json({ error: 'An error occurred while making the reservation' });
+//     }
+// };
 
 
 exports.cancelReservation = async (req, res) => {
