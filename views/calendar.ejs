@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Yearly Calendar</title>
+    <style>
+        /* Basic styling for the calendar grid */
+        .calendar {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .month {
+            width: 33%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        .month h3 {
+            text-align: center;
+            margin: 0;
+            padding-bottom: 10px;
+        }
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border: 1px solid #000;
+        }
+        .month-grid div {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yearly Calendar</h1>
+    <div class="calendar">
+        <% const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; %>
+        <% const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; %>
+
+        <% const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; %> <!-- Days in each month -->
+        <% for (let monthIndex = 0; monthIndex < 12; monthIndex++) { %>
+            <div class="month">
+                <h3><%= months[monthIndex] %></h3>
+                <div class="month-grid">
+                    <% for (let i = 0; i < daysOfWeek.length; i++) { %>
+                        <div><strong><%= daysOfWeek[i] %></strong></div>
+                    <% } %>
+                    <% let day = 1; %>
+                    <% for (let i = 0; i < 35; i++) { /* A 5x7 grid for each month */ %>
+                        <% if (i < new Date(2024, monthIndex, 1).getDay()) { %> <!-- Blank cells before the first day of the month -->
+                            <div></div>
+                        <% } else if (day <= daysInMonth[monthIndex]) { %>
+                            <div><%= day %></div>
+                            <% day++; %>
+                        <% } else { %>
+                            <div></div>
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>
