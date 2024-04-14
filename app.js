@@ -28,6 +28,12 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
   res.render('home', {title: 'Home'});
 });
+app.get('/userReservations', (req, res) => {
+  res.render('userReservations',{title: 'userReservations'});
+});
+app.get('/allReservations', (req, res) => {
+  res.render('allReservations',{title: 'allReservations'});
+});
 app.get('/calendar', (req, res) => {
   res.render('calendar',{title: 'Calendar'});
 });
@@ -37,6 +43,7 @@ app.get('/makeReservation', (req, res) => {
 app.get('/cancelReservation', (req, res) => {
   res.render('cancelReservation',{title: 'cancelReservation'});
 });
+
 app.get('/login', (req, res) => {
   const error = req.query.error; // Assuming the error value is coming from a query parameter
   res.render('login', { error });
