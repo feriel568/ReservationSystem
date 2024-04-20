@@ -3,37 +3,28 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 
-
-exports.register = async (req,res) => {
-
+exports.register = async (req, res) => {
     try {
-        
         console.log("Request Body:", req.body);
-        const existingUser = await User.findOne({ Username : req.body.Username }).exec()
-    if(existingUser){
-        return res.json("This username already exists")
-        
-        // const message = "Username already exists";
-        // return res.render('register', { message: message });
-    
-    }
-    
- 
+        const existingUser = await User.findOne({ Username: req.body.Username }).exec()
+        if (existingUser) {
+            const message = "Username already exists";
+            return res.render('register', { message: message });
+        }
 
-   const  {email , Username , password} = req.body;
-    const newUser = await User({
-        email ,
-        Username,
-        password
-    })
-    await newUser.save()
-    // const successMessage = 'Account created successfully';
-        // res.render('register', { message: successMessage });
-
-    res.json(newUser)
-    }catch(err) {
+        const { email, Username, password } = req.body;
+        const newUser = await User({
+            email,
+            Username,
+            password
+        })
+        await newUser.save()
+        const successMessage = 'Account created successfully';
+        // Define message before rendering
+        const message = successMessage;
+        res.render('register', { message: message });
+    } catch (err) {
         res.status(400).json({ error: err.message });
-
     }
 }
 
