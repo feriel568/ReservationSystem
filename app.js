@@ -5,7 +5,8 @@ const mongoose	= require('mongoose');
 const passport	= require('passport');
 const localStrategy	= require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use('/auth',auth);
 const dotenv = require('dotenv');
