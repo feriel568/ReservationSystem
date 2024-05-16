@@ -9,7 +9,7 @@ exports.register = async (req, res) => {
         const existingUser = await User.findOne({ Username: req.body.Username }).exec()
         if (existingUser) {
             const message = "Username already exists";
-            return res.render('register', { message: message });
+          return res.json({ message: message })
         }
 
         const { email, Username, password } = req.body;
@@ -19,10 +19,9 @@ exports.register = async (req, res) => {
             password
         })
         await newUser.save()
-        const successMessage = 'Account created successfully';
-        // Define message before rendering
-        const message = successMessage;
-        res.render('register', { message: message });
+        
+        
+        res.json({ newUser ,  message: "Account created successfully" });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

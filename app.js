@@ -29,6 +29,10 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
   res.render('home', {title: 'Home'});
 });
+
+app.get('/salle', (req, res) => {
+  res.render('salle', {title: 'Salle'});
+});
 app.get('/userReservations', (req, res) => {
   res.render('userReservations',{title: 'userReservations'});
 });
