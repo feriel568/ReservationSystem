@@ -7,7 +7,7 @@ const salleSchema = mongoose.Schema({
         required: true
       },
       capacity: {
-        type: Number,
+        type: String,
         required: true
       },
       location: {
@@ -26,8 +26,8 @@ const salleSchema = mongoose.Schema({
         type: String,
         enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     }],
-      startTime: { type: Date, required: true },
-      endTime: { type: Date, required: true }
+      startTime: { type: String, required: true },
+      endTime: { type: String, required: true }
      
     
      })

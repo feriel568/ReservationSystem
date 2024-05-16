@@ -1,19 +1,19 @@
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
-const User = require('../models/user')
+const Admin = require('../models/admin')
 const bcrypt = require('bcryptjs')
 
 exports.register = async (req, res) => {
     try {
         console.log("Request Body:", req.body);
-        const existingUser = await User.findOne({ Username: req.body.Username }).exec()
+        const existingUser = await Admin.findOne({ Username: req.body.Username }).exec()
         if (existingUser) {
             const message = "Username already exists";
           return res.json({ message: message })
         }
 
         const { email, Username, password } = req.body;
-        const newUser = await User({
+        const newUser = await Admin({
             email,
             Username,
             password
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
         await newUser.save()
         
         
-        res.json({ newUser ,  message: "Account created successfully" });
+        res.json({ newUser ,  message: "Account created successfully for admin" });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -35,7 +35,7 @@ exports.login = async (req,res) => {
         return res.json({ message: 'Email and password are required.' });
        
     }
-    const user = await User.findOne({ Username }).exec();
+    const user = await Admin.findOne({ Username }).exec();
     if (!user) {
         return res.json({ message: 'Authentication failed. User not found.' });
     }
@@ -45,7 +45,7 @@ exports.login = async (req,res) => {
     }
 
     const token = jwt.sign({ Username: user.Username }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    return res.json({ token , userId: user._id });
+    return res.json({ token , userId: user._id});
 
 }catch(err) {
     return res.status(500).json({ message: 'Internal Server Error' });
